@@ -31,17 +31,17 @@ jobs:
 
       - name: Build
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/heymart-store:latest .
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/heymart-management:latest .
 
       - name: Push
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/heymart-store:latest
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/heymart-management:latest
 
       - name: Deploy
         run: |
-          gcloud run deploy heymart-store \
+          gcloud run deploy heymart-management \
           --region europe-west1 \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/heymart-store \
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/heymart-management \
           --platform managed \
           --allow-unauthenticated \
           --project ${{ secrets.GCP_PROJECT_ID }} \
