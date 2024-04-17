@@ -20,17 +20,15 @@ public class ProductTest {
 
     @Test
     void testProductBuilder() {
-        Product product = new Product.builder()
-                .productName
-
-("Product A")
+        Product product = Product.builder()
+                .productName("Product A")
                 .productPrice(100000)
                 .productQuantity(25)
                 .build();
 
-        assertEquals("Product A", product.getName());
-        assertEquals(100000, product.getPrice());
-        assertEquals(25, product.getQuantity);
+        assertEquals("Product A", product.getProductName());
+        assertEquals(100000, product.getProductPrice());
+        assertEquals(25, product.getProductQuantity());
     }
 
     @Test
