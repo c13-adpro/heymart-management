@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.heymartmanagement;
 
+import id.ac.ui.cs.advprog.heymartmanagement.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,18 +12,20 @@ public class ProductTest {
     @BeforeEach
     public void setUp() {
         productA = Product.builder()
-                .name("Product A")
-                .price(100000)
-                .quantity(25)
+                .productName("Product A")
+                .productPrice(100000)
+                .productQuantity(25)
                 .build();
     }
 
     @Test
     void testProductBuilder() {
         Product product = new Product.builder()
-                .name("Product A")
-                .price(100000)
-                .quantity(25)
+                .productName
+
+("Product A")
+                .productPrice(100000)
+                .productQuantity(25)
                 .build();
 
         assertEquals("Product A", product.getName());
@@ -34,31 +37,31 @@ public class ProductTest {
     void testProductBuilderWithInvalidName() {
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .name(null);
+                    .productName(null);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .name("");
+                    .productName("");
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .name(" ");
+                    .productName(" ");
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .name(" Product A");
+                    .productName(" Product A");
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .name("!@#$%^&*()");
+                    .productName("!@#$%^&*()");
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .name("!Product A");
+                    .productName("!Product A");
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .name("The name of the product cannot exceed past the character limit " +
+                    .productName("The name of the product cannot exceed past the character limit " +
                             "of 100 that has been set by the creators of the app");
         });
     }
@@ -67,42 +70,26 @@ public class ProductTest {
     void testProductBuilderWithInvalidPrice() {
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .price(null);
+                    .productPrice(0);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .price(0);
+                    .productPrice(999);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .price(999);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            Product.builder()
-                    .price(-1);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            Product.builder()
-                    .price("angka");
+                    .productPrice(-1);
         });
     }
 
     void testProductBuilderWithInvalidQuantity() {
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .quantity(null);
+                    .productQuantity(-1);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             Product.builder()
-                    .quantity(-1);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            Product.builder()
-                    .quantity(10001);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            Product.builder()
-                    .quantity("angka");
+                    .productQuantity(10001);
         });
     }
 }
