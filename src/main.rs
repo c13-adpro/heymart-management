@@ -3,6 +3,10 @@ use std::env;
 
 #[macro_use]
 extern crate rocket;
+pub mod controller;
+pub mod model;
+pub mod repository;
+pub mod service;
 
 use dotenvy::dotenv;
 use sqlx::postgres::PgPoolOptions;
