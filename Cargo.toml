@@ -6,8 +6,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sqlx = "0.7.4"
+sqlx = { version = "0.7", features = [
+    "runtime-tokio",
+    "postgres",
+    "uuid",
+    "tls-rustls",
+] }
 rocket = { version = "0.5.0", features = ["json"] }
 lazy_static = "1.4.0"
 getset = "0.1.2"
 dotenvy = "0.15.7"
+chrono = "0.4"
