@@ -1,4 +1,4 @@
-use crate::model::supermarket::Supermarket;
+use crate::model::supermarket::{CreateSupermarketDto, Supermarket, UpdateSupermarketDto};
 use rocket::tokio;
 use sqlx::PgPool;
 
@@ -13,11 +13,15 @@ impl SupermarketRepository {
         None
     }
 
-    pub async fn create(db_pool: PgPool, supermarket: Supermarket) -> Option<Supermarket> {
+    pub async fn create(db_pool: PgPool, supermarket: CreateSupermarketDto) -> Option<Supermarket> {
         None
     }
 
-    pub async fn update(db_pool: PgPool, id: i64, supermarket: Supermarket) -> Option<Supermarket> {
+    pub async fn update(
+        db_pool: PgPool,
+        id: i64,
+        supermarket: UpdateSupermarketDto,
+    ) -> Option<Supermarket> {
         None
     }
 
