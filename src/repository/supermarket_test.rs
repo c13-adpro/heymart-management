@@ -24,6 +24,7 @@ mod tests {
             pool.clone(),
             CreateSupermarketDto {
                 name: "Supermarket".to_string(),
+                manager_id: 1,
             },
         )
         .await
@@ -31,13 +32,15 @@ mod tests {
         assert_eq!(supermarket.name, "Supermarket");
         assert_eq!(supermarket.balance, 0);
 
-        let result =
-            sqlx::query!("SELECT id, name, balance FROM supermarket WHERE name = 'Supermarket'")
-                .fetch_one(&mut *conn)
-                .await
-                .unwrap();
+        let result = sqlx::query!(
+            "SELECT id, name, balance, manager_id FROM supermarket WHERE name = 'Supermarket'"
+        )
+        .fetch_one(&mut *conn)
+        .await
+        .unwrap();
         assert_eq!(result.name, "Supermarket");
         assert_eq!(result.balance, 0);
+        assert_eq!(result.manager_id, Some(1));
     }
 
     #[sqlx::test]
@@ -139,19 +142,22 @@ mod tests {
             UpdateSupermarketDto {
                 name: Some("Supermarket 2".to_string()),
                 balance: Some(1000),
+                manager_id: Some(2),
             },
         )
         .await
         .unwrap();
         assert_eq!(supermarket.name, "Supermarket 2");
 
-        let result =
-            sqlx::query!("SELECT id, name, balance FROM supermarket WHERE name = 'Supermarket 2'")
-                .fetch_one(&mut *conn)
-                .await
-                .unwrap();
+        let result = sqlx::query!(
+            "SELECT id, name, balance, manager_id FROM supermarket WHERE name = 'Supermarket 2'"
+        )
+        .fetch_one(&mut *conn)
+        .await
+        .unwrap();
         assert_eq!(result.name, "Supermarket 2");
         assert_eq!(result.balance, 1000);
+        assert_eq!(result.manager_id, Some(2));
     }
 
     #[sqlx::test]
@@ -171,7 +177,7 @@ mod tests {
 
         sqlx::query!(
             r#"
-            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            INSERT INTO supermarket (name, manager_id) VALUES ('Supermarket 1', 1);
             "#,
         )
         .execute(&mut *conn)
@@ -184,19 +190,22 @@ mod tests {
             UpdateSupermarketDto {
                 name: Some("Supermarket 2".to_string()),
                 balance: None,
+                manager_id: None,
             },
         )
         .await
         .unwrap();
         assert_eq!(supermarket.name, "Supermarket 2");
 
-        let result =
-            sqlx::query!("SELECT id, name, balance FROM supermarket WHERE name = 'Supermarket 2'")
-                .fetch_one(&mut *conn)
-                .await
-                .unwrap();
+        let result = sqlx::query!(
+            "SELECT id, name, balance, manager_id FROM supermarket WHERE name = 'Supermarket 2'"
+        )
+        .fetch_one(&mut *conn)
+        .await
+        .unwrap();
         assert_eq!(result.name, "Supermarket 2");
         assert_eq!(result.balance, 0);
+        assert_eq!(result.manager_id, Some(1));
     }
 
     #[sqlx::test]
@@ -216,7 +225,7 @@ mod tests {
 
         sqlx::query!(
             r#"
-            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            INSERT INTO supermarket (name, manager_id) VALUES ('Supermarket 1', 1);
             "#,
         )
         .execute(&mut *conn)
@@ -229,19 +238,22 @@ mod tests {
             UpdateSupermarketDto {
                 name: None,
                 balance: Some(1000),
+                manager_id: None,
             },
         )
         .await
         .unwrap();
         assert_eq!(supermarket.balance, 1000);
 
-        let result =
-            sqlx::query!("SELECT id, name, balance FROM supermarket WHERE name = 'Supermarket 1'")
-                .fetch_one(&mut *conn)
-                .await
-                .unwrap();
+        let result = sqlx::query!(
+            "SELECT id, name, balance, manager_id FROM supermarket WHERE name = 'Supermarket 1'"
+        )
+        .fetch_one(&mut *conn)
+        .await
+        .unwrap();
         assert_eq!(result.name, "Supermarket 1");
         assert_eq!(result.balance, 1000);
+        assert_eq!(result.manager_id, Some(1));
     }
 
     #[sqlx::test]
