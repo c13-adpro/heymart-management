@@ -1,24 +1,11 @@
-FROM docker.io/library/eclipse-temurin:21-jdk-alpine AS builder
-
-WORKDIR /src/advpro
+FROM rust:latest as builder
+RUN apt-get update && apt-get -y install ca-certificates cmake musl-tools libssl-dev && rm -rf /var/lib/apt/lists/*
 COPY . .
-RUN chmod +x ./gradlew
-RUN ./gradlew clean bootJar
-
-FROM docker.io/library/eclipse-temurin:21-jre-alpine AS runner
-
-ARG USERNAME=eshop
-ARG USER_UID=1000
-ARG USER_GID=${USER_UID}
-
-RUN addgroup -g ${USER_GID} ${USERNAME} && \
-    adduser -S -u ${USER_UID} -G ${USERNAME} ${USERNAME}
-
-USER ${USERNAME}
-WORKDIR /opt/advpro
+RUN rustup default stable && rustup update
+RUN rustup target add x86_64-unknown-linux-musl
+ENV PKG_CONFIG_ALLOW_CROSS=1
+RUN cargo build --target x86_64-unknown-linux-musl --release
+FROM scratch
+COPY --from=builder /target/x86_64-unknown-linux-musl/release/rusty_fly .
 EXPOSE 8080
-COPY --from=builder --chown=${USER_UID}:${USER_GID} /src/advpro/build/libs/*.jar app.jar
-
-
-ENTRYPOINT [ "java" ]
-CMD [ "-jar", "app.jar" ]
+CMD ["/rusty_fly"]

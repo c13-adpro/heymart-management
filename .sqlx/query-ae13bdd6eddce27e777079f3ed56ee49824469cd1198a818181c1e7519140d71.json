@@ -1,0 +1,49 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            UPDATE supermarket\n            SET name = COALESCE($2, name),\n                balance = COALESCE($3, balance),\n                manager_id = COALESCE($4, manager_id)\n            WHERE id = $1\n            RETURNING id, name, balance, manager_id, created_at::text\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "balance",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "manager_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "created_at",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Varchar",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "ae13bdd6eddce27e777079f3ed56ee49824469cd1198a818181c1e7519140d71"
+}
