@@ -153,4 +153,94 @@ mod tests {
         assert_eq!(result.name, "Supermarket 2");
         assert_eq!(result.balance, 1000);
     }
+
+    #[sqlx::test]
+    async fn test_update_supermarket_name() {
+        let pool = &setup().await;
+        let mut conn = pool.acquire().await.unwrap();
+
+        sqlx::query!("ALTER SEQUENCE supermarket_id_seq RESTART WITH 1")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!("DELETE FROM supermarket")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!(
+            r#"
+            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            "#,
+        )
+        .execute(&mut *conn)
+        .await
+        .unwrap();
+
+        let supermarket = SupermarketRepository::update(
+            pool.clone(),
+            1,
+            UpdateSupermarketDto {
+                name: Some("Supermarket 2".to_string()),
+                balance: None,
+            },
+        )
+        .await
+        .unwrap();
+        assert_eq!(supermarket.name, "Supermarket 2");
+
+        let result =
+            sqlx::query!("SELECT id, name, balance FROM supermarket WHERE name = 'Supermarket 2'")
+                .fetch_one(&mut *conn)
+                .await
+                .unwrap();
+        assert_eq!(result.name, "Supermarket 2");
+        assert_eq!(result.balance, 0);
+    }
+
+    #[sqlx::test]
+    async fn test_update_supermarket_balance() {
+        let pool = &setup().await;
+        let mut conn = pool.acquire().await.unwrap();
+
+        sqlx::query!("ALTER SEQUENCE supermarket_id_seq RESTART WITH 1")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!("DELETE FROM supermarket")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!(
+            r#"
+            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            "#,
+        )
+        .execute(&mut *conn)
+        .await
+        .unwrap();
+
+        let supermarket = SupermarketRepository::update(
+            pool.clone(),
+            1,
+            UpdateSupermarketDto {
+                name: None,
+                balance: Some(1000),
+            },
+        )
+        .await
+        .unwrap();
+        assert_eq!(supermarket.balance, 1000);
+
+        let result =
+            sqlx::query!("SELECT id, name, balance FROM supermarket WHERE name = 'Supermarket 1'")
+                .fetch_one(&mut *conn)
+                .await
+                .unwrap();
+        assert_eq!(result.name, "Supermarket 1");
+        assert_eq!(result.balance, 1000);
+    }
 }
