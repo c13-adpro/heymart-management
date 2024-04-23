@@ -10,6 +10,11 @@ mod tests {
         let pool = &setup().await;
         let mut conn = pool.acquire().await.unwrap();
 
+        sqlx::query!("ALTER SEQUENCE supermarket_id_seq RESTART WITH 1")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
         sqlx::query!("DELETE FROM supermarket")
             .execute(&mut *conn)
             .await
@@ -67,5 +72,35 @@ mod tests {
         assert_eq!(supermarkets.len(), 2);
         assert_eq!(supermarkets[0].name, "Supermarket 1");
         assert_eq!(supermarkets[1].name, "Supermarket 2");
+    }
+
+    #[sqlx::test]
+    async fn test_get_supermarket_by_id() {
+        let pool = &setup().await;
+        let mut conn = pool.acquire().await.unwrap();
+
+        sqlx::query!("ALTER SEQUENCE supermarket_id_seq RESTART WITH 1")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!("DELETE FROM supermarket")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!(
+            r#"
+            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            "#,
+        )
+        .execute(&mut *conn)
+        .await
+        .unwrap();
+
+        let supermarket = SupermarketRepository::find_by_id(pool.clone(), 1)
+            .await
+            .unwrap();
+        assert_eq!(supermarket.name, "Supermarket 1");
     }
 }
