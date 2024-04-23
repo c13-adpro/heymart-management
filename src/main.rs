@@ -1,3 +1,4 @@
+use controller::route_stage;
 use rocket::tokio;
 use std::env;
 
@@ -25,7 +26,7 @@ async fn main() {
 
     rocket::build()
         .manage(pool)
-        .mount("/", routes![])
+        .attach(route_stage())
         .launch()
         .await
         .unwrap();

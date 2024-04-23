@@ -1,4 +1,4 @@
-use rocket::serde::Serialize;
+use rocket::serde::{Deserialize, Serialize};
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -10,14 +10,14 @@ pub struct Supermarket {
     pub manager_id: i32,
 }
 
-#[derive(Serialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct CreateSupermarketDto {
     pub manager_id: i32,
     pub name: String,
 }
 
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Clone, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct UpdateSupermarketDto {
     pub name: Option<String>,
