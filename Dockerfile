@@ -1,5 +1,5 @@
 # Start with a rust alpine image
-FROM rust:1-alpine3.15 AS builder
+FROM rust:latest AS builder
 
 # This is important, see https://github.com/rust-lang/docker-rust/issues/85
 ENV RUSTFLAGS="-C target-feature=-crt-static"
