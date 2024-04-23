@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::{
-        model::supermarket::CreateSupermarketDto,
+        model::supermarket::{CreateSupermarketDto, UpdateSupermarketDto},
         repository::{lib::setup, supermarket::SupermarketRepository},
     };
 
@@ -107,5 +107,50 @@ mod tests {
             .await
             .unwrap();
         assert_eq!(supermarket.name, "Supermarket 1");
+    }
+
+    #[sqlx::test]
+    async fn test_update_supermarket() {
+        let pool = &setup().await;
+        let mut conn = pool.acquire().await.unwrap();
+
+        sqlx::query!("ALTER SEQUENCE supermarket_id_seq RESTART WITH 1")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!("DELETE FROM supermarket")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!(
+            r#"
+            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            "#,
+        )
+        .execute(&mut *conn)
+        .await
+        .unwrap();
+
+        let supermarket = SupermarketRepository::update(
+            pool.clone(),
+            1,
+            UpdateSupermarketDto {
+                name: Some("Supermarket 2".to_string()),
+                balance: Some(1000),
+            },
+        )
+        .await
+        .unwrap();
+        assert_eq!(supermarket.name, "Supermarket 2");
+
+        let result =
+            sqlx::query!("SELECT id, name, balance FROM supermarket WHERE name = 'Supermarket 2'")
+                .fetch_one(&mut *conn)
+                .await
+                .unwrap();
+        assert_eq!(result.name, "Supermarket 2");
+        assert_eq!(result.balance, 1000);
     }
 }
