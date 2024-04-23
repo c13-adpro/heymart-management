@@ -1,5 +1,5 @@
 use crate::{
-    lib::{error_response::error_response, heymart_result::Result},
+    library::{error_response::error_response, heymart_result::Result},
     model::supermarket::{CreateSupermarketDto, Supermarket, UpdateSupermarketDto},
     repository::supermarket::SupermarketRepository,
 };

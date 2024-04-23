@@ -7,6 +7,5 @@ ENV PKG_CONFIG_ALLOW_CROSS=1
 RUN cargo build --target x86_64-unknown-linux-musl --release
 FROM scratch
 COPY --from=builder /target/x86_64-unknown-linux-musl/release/rusty_fly .
-COPY templates templates
 EXPOSE 8080
 CMD ["/rusty_fly"]

@@ -1,6 +1,6 @@
 use crate::model::supermarket::{CreateSupermarketDto, UpdateSupermarketDto};
 use crate::service::supermarket::SupermarketService;
-use crate::{lib::heymart_result::Result, model::supermarket::Supermarket};
+use crate::{library::heymart_result::Result, model::supermarket::Supermarket};
 use rocket::{get, post, State};
 use rocket::{response::status::Created, serde::json::Json};
 use sqlx::PgPool;
