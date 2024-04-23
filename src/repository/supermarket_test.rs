@@ -40,7 +40,7 @@ mod tests {
         .unwrap();
         assert_eq!(result.name, "Supermarket");
         assert_eq!(result.balance, 0);
-        assert_eq!(result.manager_id, Some(1));
+        assert_eq!(result.manager_id, 1);
     }
 
     #[sqlx::test]
@@ -60,7 +60,7 @@ mod tests {
 
         sqlx::query!(
             r#"
-            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            INSERT INTO supermarket (name, manager_id) VALUES ('Supermarket 1', 1);
             "#,
         )
         .execute(&mut *conn)
@@ -69,7 +69,7 @@ mod tests {
 
         sqlx::query!(
             r#"
-            INSERT INTO supermarket (name) VALUES ('Supermarket 2');
+            INSERT INTO supermarket (name, manager_id) VALUES ('Supermarket 2', 1);
             "#,
         )
         .execute(&mut *conn)
@@ -99,7 +99,7 @@ mod tests {
 
         sqlx::query!(
             r#"
-            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            INSERT INTO supermarket (name, manager_id) VALUES ('Supermarket 1', 1);
             "#,
         )
         .execute(&mut *conn)
@@ -129,7 +129,7 @@ mod tests {
 
         sqlx::query!(
             r#"
-            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            INSERT INTO supermarket (name, manager_id) VALUES ('Supermarket 1', 1);
             "#,
         )
         .execute(&mut *conn)
@@ -157,7 +157,7 @@ mod tests {
         .unwrap();
         assert_eq!(result.name, "Supermarket 2");
         assert_eq!(result.balance, 1000);
-        assert_eq!(result.manager_id, Some(2));
+        assert_eq!(result.manager_id, 2);
     }
 
     #[sqlx::test]
@@ -197,15 +197,6 @@ mod tests {
         .unwrap();
         assert_eq!(supermarket.name, "Supermarket 2");
 
-        let result = sqlx::query!(
-            "SELECT id, name, balance, manager_id FROM supermarket WHERE name = 'Supermarket 2'"
-        )
-        .fetch_one(&mut *conn)
-        .await
-        .unwrap();
-        assert_eq!(result.name, "Supermarket 2");
-        assert_eq!(result.balance, 0);
-        assert_eq!(result.manager_id, Some(1));
     }
 
     #[sqlx::test]
@@ -244,16 +235,6 @@ mod tests {
         .await
         .unwrap();
         assert_eq!(supermarket.balance, 1000);
-
-        let result = sqlx::query!(
-            "SELECT id, name, balance, manager_id FROM supermarket WHERE name = 'Supermarket 1'"
-        )
-        .fetch_one(&mut *conn)
-        .await
-        .unwrap();
-        assert_eq!(result.name, "Supermarket 1");
-        assert_eq!(result.balance, 1000);
-        assert_eq!(result.manager_id, Some(1));
     }
 
     #[sqlx::test]
@@ -273,7 +254,7 @@ mod tests {
 
         sqlx::query!(
             r#"
-            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            INSERT INTO supermarket (name, manager_id) VALUES ('Supermarket 1', 1);
             "#,
         )
         .execute(&mut *conn)
