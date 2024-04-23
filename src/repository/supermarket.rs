@@ -1,5 +1,5 @@
 use crate::model::supermarket::{CreateSupermarketDto, Supermarket, UpdateSupermarketDto};
-use sqlx::PgPool;
+use sqlx::{query, PgPool};
 
 pub struct SupermarketRepository {}
 
@@ -60,7 +60,26 @@ impl SupermarketRepository {
         id: i64,
         supermarket: UpdateSupermarketDto,
     ) -> Option<Supermarket> {
-        None
+        let query = sqlx::query_as!(
+            Supermarket,
+            r#"
+            UPDATE supermarket
+            SET name = COALESCE($2, name),
+                balance = COALESCE($3, balance)
+            WHERE id = $1
+            RETURNING id, name, balance, created_at::text
+            "#,
+            id,
+            supermarket.name,
+            supermarket.balance
+        )
+        .fetch_one(&db_pool)
+        .await;
+
+        match query {
+            Ok(supermarket) => Some(supermarket),
+            Err(_) => None,
+        }
     }
 
     pub async fn delete(db_pool: PgPool, id: i64) -> Option<Supermarket> {
