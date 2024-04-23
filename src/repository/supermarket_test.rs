@@ -33,4 +33,34 @@ mod tests {
         assert_eq!(result.id, 1);
         nuke(pool).await;
     }
+
+    #[tokio::test]
+    async fn test_get_all_supermarkets() {
+        let pool = setup().await;
+        let mut conn = pool.clone().acquire().await.unwrap();
+
+        sqlx::query!(
+            r#"
+            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            "#,
+        )
+        .execute(&mut *conn)
+        .await
+        .unwrap();
+
+        sqlx::query!(
+            r#"
+            INSERT INTO supermarket (name) VALUES ('Supermarket 2');
+            "#,
+        )
+        .execute(&mut *conn)
+        .await
+        .unwrap();
+
+        let supermarkets = SupermarketRepository::find_all(pool.clone()).await.unwrap();
+        assert_eq!(supermarkets.len(), 2);
+        assert_eq!(supermarkets[0].name, "Supermarket 1");
+        assert_eq!(supermarkets[1].name, "Supermarket 2");
+        nuke(pool).await;
+    }
 }
