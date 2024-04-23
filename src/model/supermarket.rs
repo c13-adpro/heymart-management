@@ -17,7 +17,7 @@ pub struct CreateSupermarketDto {
     pub name: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 #[serde(crate = "rocket::serde")]
 pub struct UpdateSupermarketDto {
     pub name: Option<String>,
