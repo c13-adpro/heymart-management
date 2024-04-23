@@ -11,6 +11,7 @@ sqlx = { version = "0.7", features = [
     "postgres",
     "uuid",
     "tls-rustls",
+    "migrate",
 ] }
 rocket = { version = "0.5.0", features = ["json"] }
 lazy_static = "1.4.0"

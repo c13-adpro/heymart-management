@@ -6,7 +6,20 @@ pub struct SupermarketRepository {}
 
 impl SupermarketRepository {
     pub async fn find_all(db_pool: PgPool) -> Option<Vec<Supermarket>> {
-        None
+        let query = sqlx::query_as!(
+            Supermarket,
+            r#"
+            SELECT id, name, balance, created_at::text
+            FROM supermarket
+            "#,
+        )
+        .fetch_all(&db_pool)
+        .await;
+
+        match query {
+            Ok(supermarkets) => Some(supermarkets),
+            Err(_) => None,
+        }
     }
 
     pub async fn find_by_id(db_pool: PgPool, id: i64) -> Option<Supermarket> {
