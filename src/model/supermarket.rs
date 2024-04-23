@@ -6,7 +6,7 @@ pub struct Supermarket {
     pub id: i64,
     pub name: String,
     pub balance: i32,
-    pub created_at: String,
+    pub created_at: Option<String>,
 }
 
 #[derive(Serialize)]
