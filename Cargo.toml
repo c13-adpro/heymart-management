@@ -16,3 +16,4 @@ rocket = { version = "0.5.0", features = ["json"] }
 lazy_static = "1.4.0"
 getset = "0.1.2"
 dotenvy = "0.15.7"
+rust-test = "0.1.0"

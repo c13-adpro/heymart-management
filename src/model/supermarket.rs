@@ -8,3 +8,16 @@ pub struct Supermarket {
     pub balance: i32,
     pub created_at: String,
 }
+
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct CreateSupermarketDto {
+    pub name: String,
+}
+
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct UpdateSupermarketDto {
+    pub name: Option<String>,
+    pub balance: Option<i32>,
+}
