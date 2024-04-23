@@ -243,4 +243,34 @@ mod tests {
         assert_eq!(result.name, "Supermarket 1");
         assert_eq!(result.balance, 1000);
     }
+
+    #[sqlx::test]
+    async fn test_delete_supermarket() {
+        let pool = &setup().await;
+        let mut conn = pool.acquire().await.unwrap();
+
+        sqlx::query!("ALTER SEQUENCE supermarket_id_seq RESTART WITH 1")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!("DELETE FROM supermarket")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
+        sqlx::query!(
+            r#"
+            INSERT INTO supermarket (name) VALUES ('Supermarket 1');
+            "#,
+        )
+        .execute(&mut *conn)
+        .await
+        .unwrap();
+
+        let supermarket = SupermarketRepository::delete(pool.clone(), 1)
+            .await
+            .unwrap();
+        assert_eq!(supermarket.name, "Supermarket 1");
+    }
 }
