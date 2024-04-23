@@ -45,6 +45,11 @@ mod tests {
         let pool = &setup().await;
         let mut conn = pool.acquire().await.unwrap();
 
+        sqlx::query!("ALTER SEQUENCE supermarket_id_seq RESTART WITH 1")
+            .execute(&mut *conn)
+            .await
+            .unwrap();
+
         sqlx::query!("DELETE FROM supermarket")
             .execute(&mut *conn)
             .await

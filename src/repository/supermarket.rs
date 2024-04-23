@@ -1,6 +1,5 @@
 use crate::model::supermarket::{CreateSupermarketDto, Supermarket, UpdateSupermarketDto};
-use rocket::tokio;
-use sqlx::{query, PgPool};
+use sqlx::PgPool;
 
 pub struct SupermarketRepository {}
 
@@ -23,7 +22,22 @@ impl SupermarketRepository {
     }
 
     pub async fn find_by_id(db_pool: PgPool, id: i64) -> Option<Supermarket> {
-        None
+        let query = sqlx::query_as!(
+            Supermarket,
+            r#"
+            SELECT id, name, balance, created_at::text
+            FROM supermarket
+            WHERE id = $1
+            "#,
+            id
+        )
+        .fetch_one(&db_pool)
+        .await;
+
+        match query {
+            Ok(supermarket) => Some(supermarket),
+            Err(_) => None,
+        }
     }
 
     pub async fn create(db_pool: PgPool, supermarket: CreateSupermarketDto) -> Option<Supermarket> {
