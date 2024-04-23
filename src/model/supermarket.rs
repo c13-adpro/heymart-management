@@ -7,11 +7,13 @@ pub struct Supermarket {
     pub name: String,
     pub balance: i32,
     pub created_at: Option<String>,
+    pub manager_id: i32,
 }
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct CreateSupermarketDto {
+    pub manager_id: i32,
     pub name: String,
 }
 
@@ -20,4 +22,5 @@ pub struct CreateSupermarketDto {
 pub struct UpdateSupermarketDto {
     pub name: Option<String>,
     pub balance: Option<i32>,
+    pub manager_id: Option<i32>,
 }
