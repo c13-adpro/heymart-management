@@ -12,6 +12,13 @@ import id.ac.ui.cs.advprog.heymartmanagement.model.Product;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+    @GetMapping("/create")
+    public String createProductPage(Model model) {
+
+        Product product = new Product("1", "product 1", 50000, 5);
+        model.addAttribute("product", product);
+        return "createProduct";
+    }
 
 }
 
