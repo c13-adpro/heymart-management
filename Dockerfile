@@ -9,4 +9,5 @@ COPY . .
 RUN rustup default nightly
 RUN cargo build
 
+EXPOSE 8080
 CMD ["cargo", "run"]
