@@ -19,4 +19,4 @@ getset = "0.1.2"
 dotenvy = "0.15.7"
 rust-test = "0.1.0"
 rocket_cors = "0.6.0"
-reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+reqwest = { version = "0.12", features = ["json"] }
