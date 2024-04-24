@@ -5,6 +5,8 @@ use std::env;
 #[macro_use]
 extern crate rocket;
 pub mod controller;
+
+pub mod guard;
 pub mod library;
 pub mod model;
 pub mod repository;
