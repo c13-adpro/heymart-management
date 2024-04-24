@@ -14,5 +14,9 @@ COPY . .
 # build
 RUN cargo build --release
 
+ENV ROCKET_ADDRESS=0.0.0.0
+ENV ROCKET_PORT=8080
+EXPOSE 8080
+
 # run
 CMD ["./target/release/management"]
