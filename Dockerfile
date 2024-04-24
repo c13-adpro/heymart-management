@@ -19,7 +19,7 @@ RUN strip target/release/management
 FROM alpine:3.15
 
 # if needed, install additional dependencies here
-RUN apk add --no-cache libgcc openssl-dev openssl-sys
+RUN apk add --no-cache libgcc pkgconfig openssl-dev
 
 COPY --from=builder /app/target/release/management /usr/local/bin/
 
