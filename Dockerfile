@@ -1,12 +1,17 @@
-FROM rust:latest as builder
-RUN apt-get update && apt-get -y install ca-certificates cmake musl-tools openssl libssl-dev && rm -rf /var/lib/apt/lists/*
+# from debian
+FROM debian:buster-slim
+
+# install rust
+RUN apt-get update && apt-get install -y curl
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup default nightly
+
+# copy all codes
 COPY . .
-RUN export OPENSSL_NO_VENDOR=Y
-RUN rustup default stable && rustup update
-RUN rustup target add x86_64-unknown-linux-musl
-ENV PKG_CONFIG_ALLOW_CROSS=1
-RUN cargo build --target x86_64-unknown-linux-musl --release
-FROM scratch
-COPY --from=builder /target/x86_64-unknown-linux-musl/release/management .
-EXPOSE 8080
-CMD ["/management"]
+
+# build
+RUN cargo build --release
+
+# run
+CMD ["./target/release/management"]
