@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
+
 public class Product {
     String productId;
     String productName;
